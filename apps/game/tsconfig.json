@@ -1,12 +1,22 @@
 {
-  "extends": "@yeet/typescript-config/nextjs.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Next.js",
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
+    "allowJs": true,
+    "declaration": false,
+    "declarationMap": false,
+    "incremental": true,
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "ES2020",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/app/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
 }

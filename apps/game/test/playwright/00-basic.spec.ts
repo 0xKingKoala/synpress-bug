@@ -26,7 +26,7 @@ test("should connect wallet to the MetaMask Test Dapp", async ({
 
   await page
     .getByRole("main")
-    .getByText("CONNECT WAm,nm,LLET", { exact: true })
+    .getByText("CONNECT WALLET", { exact: true })
     .click();
   await page.getByText("MetaMask", { exact: true }).click();
 
