@@ -1,0 +1,43 @@
+name: MVP Bug replication
+
+on:
+  workflow_dispatch:
+jobs:
+  run-e2es:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./apps/game
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile && npx playwright install --with-deps
+      - name: Create cache (headless)
+        run: xvfb-run pnpm test:e2e:prepare
+        env:
+          CI: true
+      - name: Run tests
+        timeout-minutes: 15
+        run: xvfb-run pnpm playwright test
+        env:
+          HEADLESS: true
+          CI: true
+          DEBUG: "synpress:*"
+          SYNPRESS_SKIP_METAMASK_SETUP: "false"
+          BASE_URL: https://bartio.game.yeetit.xyz/
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            apps/game/playwright-report/**
+            apps/game/test-results/**
+          retention-days: 30
